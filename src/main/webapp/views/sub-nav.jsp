@@ -4,7 +4,7 @@
     <div class="container-fluid justify-content-end">
         <ul class="navbar-nav">
             <li class="nav-item">
-                <button class="btn btn-danger">Xin chao admin!</button>
+                <a class="btn btn-danger" href="/logout">Logout!</a>
             </li>
         </ul>
     </div>

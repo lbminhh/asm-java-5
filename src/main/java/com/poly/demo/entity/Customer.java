@@ -8,6 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,9 +19,9 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "customer")
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 public class Customer {
 
     @Id
@@ -27,7 +29,7 @@ public class Customer {
     Long id;
 
     @Column(name = "fullname")
-    String fullname;
+    String fullName;
 
     @Column(name = "phone_number")
     String phoneNumber;

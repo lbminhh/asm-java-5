@@ -1,0 +1,113 @@
+<%@page language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="f" uri="jakarta.tags.functions" %>
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+</head>
+<body>
+<div class="container-fluid d-flex" style="height: calc(100vh - 16px);">
+    <jsp:include page="../navbar.jsp"/>
+    <div style="width: calc(100vw - 274px); margin-left: 242px">
+        <jsp:include page="../sub-nav.jsp"/>
+        <div class="mt-3 container">
+            <div class="row border p-3 d-flex">
+                <div class="col-6">
+                    <a href="/user/list?page=1" class="btn btn-success text-white fw-bold">
+                        Quay lại
+                    </a>
+                </div>
+            </div>
+            <div class="border p-3 mt-3">
+                <div class="row" style="margin-bottom: 40px;">
+                    <div class="col-3">
+                        <h5>Thêm Mới Người Dùng</h5>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between flex-column" style="height: calc(100vh - 232px);">
+                    <form action="/user/store" method="post">
+                        <div class="col-6">
+                            <label class="form-label">Họ và tên:</label>
+                            <input type="text" class="form-control" name="fullName" value="${request.fullName}">
+                            <c:if test="${not empty errors['fullName']}">
+                                <small style="color: red">${errors['fullName']}</small>
+                            </c:if>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Tài khoản:</label>
+                            <input type="text" class="form-control" name="username" value="${request.username}">
+                            <c:if test="${not empty errors['username']}">
+                                <small style="color: red">${errors['username']}</small>
+                            </c:if>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Mật khẩu:</label>
+                            <input type="text" class="form-control" name="password" value="${request.password}">
+                            <c:if test="${not empty errors['password']}">
+                                <small style="color: red">${errors['password']}</small>
+                            </c:if>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Trạng thái:</label>
+                            <select class="form-select" aria-label="Default select example" name="status">
+                                <option value="${null}" selected>--Lựa chọn--</option>
+                                <option value="${true}" ${request.status ? "selected" : ""}>Hoạt động</option>
+                                <option value="${false}" ${request.status == false ? "selected" : ""}>Ngưng hoạt động</option>
+                            </select>
+                            <c:if test="${not empty errors['status']}">
+                                <small style="color: red">${errors['status']}</small>
+                            </c:if>
+                        </div>
+                        <div>
+                            <button class="btn btn-success" type="submit">Thêm</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function showNotification(message, type) {
+        console.log('okkkkk')
+        let color = null;
+        if (type == 'error') {
+            color = "#c0392b"
+        } else {
+            color = '#2ecc71'
+        }
+        Toastify({
+            text: message,
+            duration: 3000,
+            close: true,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: color, // Màu đỏ đậm hơn
+                color: "#fff", // Màu trắng cho độ tương phản
+                padding: "15px 20px",
+                borderRadius: "5px",
+                boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.15)",
+                fontFamily: "sans-serif",
+                fontSize: "16px"
+            },
+            onClick: function () { }
+        }).showToast();
+    }
+</script>
+</html>

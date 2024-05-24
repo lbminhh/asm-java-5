@@ -15,77 +15,55 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script>
+        function showNotification(message, type) {
+            console.log('okkkkk')
+            let color = null;
+            if (type == 'error') {
+                color = "#c0392b"
+            } else {
+                color = '#2ecc71'
+            }
+            Toastify({
+                text: message,
+                duration: 3000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: color, // Màu đỏ đậm hơn
+                    color: "#fff", // Màu trắng cho độ tương phản
+                    padding: "15px 20px",
+                    borderRadius: "5px",
+                    boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.15)",
+                    fontFamily: "sans-serif",
+                    fontSize: "16px"
+                },
+                onClick: function () { }
+            }).showToast();
+        }
+    </script>
 </head>
 <body>
+<c:if test="${not empty successMessage}">
+    <script type="text/javascript">
+        showNotification("${successMessage}", "success");
+    </script>
+</c:if>
 <div class="container-fluid d-flex" style="height: calc(100vh - 16px);">
-    <jsp:include page="navbar.jsp"/>
-    <div style="width: calc(100vw - 274px);">
-        <jsp:include page="sub-nav.jsp"/>
+    <jsp:include page="../navbar.jsp"/>
+    <div style="width: calc(100vw - 274px); margin-left: 242px">
+        <jsp:include page="../sub-nav.jsp"/>
         <div class="mt-3 container">
             <div class="row border p-3 d-flex">
                 <div class="col-6">
-                    <button type="button" class="btn btn-success text-white fw-bold" data-bs-toggle="modal"
-                            data-bs-target="#add-san-pham">
+                    <a href="/product/create" class="btn btn-success text-white fw-bold">
                         <i class="fa-solid fa-plus"></i>
                         Thêm sản phẩm
-                    </button>
-                </div>
-
-                <!-- Modal thêm sản phẩm -->
-                <div class="modal fade" id="add-san-pham" tabindex="-1" aria-labelledby="exampleModalLabel"
-                     aria-hidden="true">
-                    <div class="modal-dialog">
-                        <form action="/product/add" method="post">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Thêm sản phẩm</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="mb-3">
-                                        <label class="form-label">Mã sản phẩm:</label>
-                                        <input type="text" class="form-control"
-                                               placeholder="Please enter here..." name="productCode">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Tên sản phẩm:</label>
-                                        <input type="text" class="form-control"
-                                               placeholder="Please enter here..." name="productName">
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Trạng thái:</label>
-                                        <select class="form-select" name="status">
-                                            <option selected>--Lựa chọn--</option>
-                                            <option value="${true}">
-                                                Đang hoạt động
-                                            </option>
-                                            <option value="${false}">
-                                                Ngừng hoạt động
-                                            </option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label class="form-label">Mô tả:</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"
-                                        ></textarea>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="formFile" class="form-label">URL ảnh:</label>
-                                        <input class="form-control" type="text">
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                    >Close
-                                    </button>
-                                    <button type="submit" class="btn btn-primary">Save
-                                        changes
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+                    </a>
                 </div>
             </div>
             <div class="border p-3 mt-3">
@@ -107,8 +85,9 @@
                         <thead>
                         <tr>
                             <th>Mã sản phẩm</th>
-                            <th>Ảnh</th>
                             <th>Tên sản phẩm</th>
+                            <th>Thể loại</th>
+                            <th>Hãng</th>
                             <th>Số lượng tồn</th>
                             <th>Trạng thái</th>
                             <th>Tương tác</th>
@@ -117,86 +96,21 @@
                         <tbody>
                         <c:forEach items="${list}" var="item">
                             <tr>
-                                <td>${item.productCode}</td>
-                                <td>
-                                    <div class="border rounded bg-light overflow-hidden d-flex align-items-center justify-content-center shadow"
-                                         style="height: 60px; width: 70px;">
-                                        <img>
-                                    </div>
-                                </td>
+                                <td>${item.id}</td>
                                 <td>${item.productName}</td>
+                                <td>${item.cateName}</td>
+                                <td>${item.brandName}</td>
                                 <td>
                                         ${item.totalQuantity == null ? 0 : item.totalQuantity}
                                 </td>
                                 <td>${item.status ? "Đang hoạt động" : "Ngừng hoạt động"}</td>
                                 <td style="width: 1px;" class="text-nowrap">
-                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    <a type="button" class="btn btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#detail-san-pham${item.id}">Xem
-                                    </button>
-                                    <button type="button" class="btn btn-warning" data-bs-toggle="modal"
-                                            data-bs-target="#update-san-pham${item.id}">Sửa
-                                    </button>
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                                            data-bs-target="#delete-san-pham${item.id}">Xoá
-                                    </button>
+                                    </a>
+                                    <a class="btn btn-warning" href="/product/edit/${item.id}">Sửa</a>
                                 </td>
                             </tr>
-                            <!-- Modal sửa sản phẩm -->
-                            <div class="modal fade" id="update-san-pham${item.id}" tabindex="-1"
-                                 aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form action="/product/update/${item.id}" method="post">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="exampleModalLabel">Sửa sản phẩm</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Code:</label>
-                                                    <input type="text" class="form-control"
-                                                           placeholder="Please enter here..." readonly
-                                                           value="${item.productCode}" name="productCode">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Tên sản phẩm:</label>
-                                                    <input type="text" class="form-control"
-                                                           placeholder="Please enter here..."
-                                                           value="${item.productName}" name="productName">
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Trạng thái:</label>
-                                                    <select class="form-select" name="status">
-                                                        <option value="${true}" ${item.status ? "selected" : ""}>
-                                                            Đang hoạt động
-                                                        </option>
-                                                        <option value="${false}" ${!item.status ? "selected" : ""}>
-                                                            Ngừng hoạt động
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label for="form-label" class="form-label">Ảnh</label>
-                                                    <div>
-                                                        <img alt="" style="height: 60px;">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                                                >Close
-                                                </button>
-                                                <button type="submit" class="btn btn-primary">Save
-                                                    changes
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
                             <!-- Modal xem sản phẩm-->
                             <div class="modal fade" id="detail-san-pham${item.id}" tabindex="-1"
                                  aria-labelledby="exampleModalLabel"
@@ -213,11 +127,6 @@
                                                 <label class="form-label">id:</label>
                                                 <input type="text" class="form-control" readonly value="${item.id}"
                                                        disabled>
-                                            </div>
-                                            <div class="mb-3">
-                                                <label class="form-label">Code:</label>
-                                                <input type="text" class="form-control" readonly
-                                                       value="${item.productCode}" disabled>
                                             </div>
                                             <div class="mb-3">
                                                 <label class="form-label">Tên sản phẩm:</label>
@@ -259,7 +168,7 @@
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h5 class="modal-title" id="exampleModalLabel">Bạn có chắc chắn muốn
-                                                xoá ${item.productCode} không?
+                                                xoá ${item.productName} không?
                                             </h5>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                     aria-label="Close"></button>
@@ -337,5 +246,4 @@
     </div>
 </div>
 </body>
-
 </html>

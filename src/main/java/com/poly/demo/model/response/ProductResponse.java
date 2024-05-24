@@ -11,9 +11,11 @@ public class ProductResponse {
 
     Long id;
 
-    String productCode;
-
     String productName;
+
+    String brandName;
+
+    String cateName;
 
     Boolean status;
 
